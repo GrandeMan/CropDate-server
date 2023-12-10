@@ -9,3 +9,28 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Crop {
+  id        Int      @id @default(autoincrement())
+  name      String
+  unit      String
+  prices    Price[]
+  volumes   Volume[]
+}
+
+model Price {
+  id        Int      @id @default(autoincrement())
+  crop      Crop     @relation(fields: [cropId], references: [id])
+  cropId    Int
+  date      DateTime
+  price     Float
+}
+
+model Volume {
+  id        Int      @id @default(autoincrement())
+  crop      Crop     @relation(fields: [cropId], references: [id])
+  cropId    Int
+  date      DateTime
+  volume    Float
+}
+
