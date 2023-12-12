@@ -1,12 +1,9 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
 
 const router = Router();
-const prisma = new PrismaClient();
 
 router.get("/crops", async (req, res) => {
-	// res.json(await prisma.crop.findMany());
-	res.json({ message: "path works" });
+	res.send();
 });
 
 router.get("/crops/:id", async (req, res) => {});
