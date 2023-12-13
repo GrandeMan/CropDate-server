@@ -12,25 +12,27 @@ datasource db {
 
 model Crop {
   id        Int      @id @default(autoincrement())
-  name      String
+  category  String
+  commodity String
   unit      String
   prices    Price[]
   volumes   Volume[]
 }
 
 model Price {
-  id        Int      @id @default(autoincrement())
-  crop      Crop     @relation(fields: [cropId], references: [id])
-  cropId    Int
-  date      DateTime
-  price     Float
+  id     Int      @id @default(autoincrement())
+  crop   Crop     @relation(fields: [cropId], references: [id])
+  cropId Int
+  date   DateTime
+  price  Float
+  market String
 }
 
 model Volume {
-  id        Int      @id @default(autoincrement())
-  crop      Crop     @relation(fields: [cropId], references: [id])
-  cropId    Int
-  date      DateTime
-  volume    Float
+  id     Int      @id @default(autoincrement())
+  crop   Crop     @relation(fields: [cropId], references: [id])
+  cropId Int
+  date   DateTime
+  volume Float
+  market String
 }
-

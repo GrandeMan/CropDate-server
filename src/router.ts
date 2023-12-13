@@ -1,9 +1,17 @@
 import { Router } from "express";
-
+import { fetchData } from "./crawler";
+import { updateDatabaseDaily } from "./updateDaily";
+import data from "../tests/testData_13_12_23.js";
 const router = Router();
 
 router.get("/crops", async (req, res) => {
-	res.send();
+	try {
+		let dbReadyData = await updateDatabaseDaily(data);
+		res.send(dbReadyData);
+	} catch (e) {
+		console.error(e);
+		res.status(500).send("Internal Server Error");
+	}
 });
 
 router.get("/crops/:id", async (req, res) => {});

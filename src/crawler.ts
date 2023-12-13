@@ -1,12 +1,12 @@
-import fs from "fs";
-import path from "path";
 import axios from "axios";
 import xlsx from "xlsx";
 import csvParse from "csv-parse/sync";
-import { html, load } from "cheerio";
-import { PrismaClient } from "@prisma/client";
+import { load } from "cheerio";
+import { get } from "http";
 
-async function fetchData(): Promise<any> {
+const today = new Date().toISOString();
+
+export async function fetchData(): Promise<any> {
 	try {
 		//fetch from url
 		const GET_URL = "https://www.namistt.com/";
@@ -39,12 +39,16 @@ async function fetchData(): Promise<any> {
 				const unit = record[1];
 				const volume = parseFloat(record[3]) || 0;
 				const price = parseFloat(record[6]) || 0;
+				const date = today;
+				const market = "NDNWM";
 
 				return {
 					commodity,
 					unit,
 					volume,
 					price,
+					market,
+					date,
 				};
 			},
 		});
