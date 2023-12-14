@@ -37,10 +37,12 @@ export async function updateDatabaseDaily(data: CropData[]): Promise<void> {
 			await prisma.volume.upsert({
 				where: {
 					id: crop && crop.id,
+					cropId: crop && crop.id,
 					date: item.date,
 				},
 				update: {
 					volume: item.volume,
+					date: item.date,
 				},
 				create: {
 					crop: {
@@ -58,10 +60,12 @@ export async function updateDatabaseDaily(data: CropData[]): Promise<void> {
 			await prisma.price.upsert({
 				where: {
 					id: crop && crop.id,
+					cropId: crop && crop.id,
 					date: item.date,
 				},
 				update: {
 					price: item.price,
+					date: item.date,
 				},
 				create: {
 					crop: {
@@ -78,5 +82,7 @@ export async function updateDatabaseDaily(data: CropData[]): Promise<void> {
 	} catch (e) {
 		console.error("Error caught in updateDatabaseDaily:", e);
 		throw e;
+	} finally {
+		await prisma.$disconnect();
 	}
 }
