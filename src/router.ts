@@ -1,18 +1,14 @@
 import { Router } from "express";
-import { fetchData } from "./crawler";
-import { updateDatabaseDaily } from "./updateDaily";
-// import data from "../tests/testData_13_12_23.js";
+
 const router = Router();
 
 router.get("/crops", async (req, res) => {
 	try {
-		const data = await fetchData();
-
-		let update = await updateDatabaseDaily(data);
-		res.send(update);
+		res.status(200).json({
+			message: "Data has been updated, proceeding to update database.",
+		});
 	} catch (e) {
-		console.error(e);
-		res.status(500).send("Internal Server Error");
+		console.error("Error in fetch/update CRON job", e);
 	}
 });
 

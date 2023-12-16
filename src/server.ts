@@ -22,6 +22,16 @@ import path from "path";
 import express from "express";
 import router from "./router";
 import morgan from "morgan";
+import cron from "node-cron";
+import { fetchData } from "./crawler";
+import { updateDatabaseDaily } from "./updateDaily";
+import { updateBuffer } from "./handlers/updateBuffer";
+
+// Run the updateBuffer function every weekday at 9:20 AM
+cron.schedule("20 9 * * 1-5", updateBuffer(fetchData, updateDatabaseDaily), {
+	scheduled: true,
+	timezone: "America/Port_of_Spain",
+});
 
 const app = express();
 app.use(morgan("dev"));
