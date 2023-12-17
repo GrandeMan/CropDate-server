@@ -26,12 +26,20 @@ import cron from "node-cron";
 import { fetchData } from "./crawler";
 import { updateDatabaseDaily } from "./updateDaily";
 import { updateBuffer } from "./handlers/updateBuffer";
+import { clearCache } from "./cacheCrops";
 
 // Run the updateBuffer function every weekday at 9:20 AM
-cron.schedule("20 9 * * 1-5", updateBuffer(fetchData, updateDatabaseDaily), {
-	scheduled: true,
-	timezone: "America/Port_of_Spain",
-});
+cron.schedule(
+	"20 9 * * 1-5",
+	async () => {
+		updateBuffer(fetchData, updateDatabaseDaily);
+		clearCache();
+	},
+	{
+		scheduled: false,
+		timezone: "America/Port_of_Spain",
+	}
+);
 
 const app = express();
 app.use(morgan("dev"));

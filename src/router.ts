@@ -1,14 +1,17 @@
 import { Router } from "express";
+import { cacheCrops, clearCache } from "./cacheCrops";
 
 const router = Router();
 
 router.get("/crops", async (req, res) => {
 	try {
-		res.status(200).json({
-			message: "Data has been updated, proceeding to update database.",
-		});
+		// Fetch cached crops or fetch from database if cache is empty
+		const crops = await cacheCrops();
+
+		res.status(200).json(crops);
 	} catch (e) {
-		console.error("Error in fetch/update CRON job", e);
+		console.error("Error getting crops from database", e);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
 
