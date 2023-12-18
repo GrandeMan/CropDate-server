@@ -26,7 +26,7 @@ import cron from "node-cron";
 import { fetchData } from "./crawler";
 import { updateDatabaseDaily } from "./updateDaily";
 import { updateBuffer } from "./handlers/updateBuffer";
-import { clearCache } from "./cacheCrops";
+import { clearCache } from "./cache";
 
 // Run the updateBuffer function every weekday at 9:20 AM
 cron.schedule(
