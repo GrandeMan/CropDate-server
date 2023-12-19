@@ -1,14 +1,20 @@
 import { Router } from "express";
 import { cacheCrops, cacheRates } from "./cache";
+import { fetchCropData, fetchMonthlyVolume } from "./crawler";
+import { updateDatabaseDaily } from "./updateDaily";
 
 const router = Router();
 
 router.get("/crops", async (req, res) => {
 	try {
 		// Fetch cached crops or fetch from database if cache is empty
-		const crops = await cacheCrops();
+		// const crops = await cacheCrops();
+		// let data = await fetchCropData();
+		// let ready = await updateDatabaseDaily(data);
 
-		res.status(200).json(crops);
+		let ready = await fetchMonthlyVolume();
+
+		res.status(200).json(ready);
 	} catch (e) {
 		console.error("Error getting crops from database", e);
 		res.status(500).json({ error: "Internal Server Error" });

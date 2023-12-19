@@ -23,7 +23,7 @@ import express from "express";
 import router from "./router";
 import morgan from "morgan";
 import cron from "node-cron";
-import { fetchData } from "./crawler";
+import { fetchCropData } from "./crawler";
 import { updateDatabaseDaily } from "./updateDaily";
 import { updateBuffer } from "./handlers/updateBuffer";
 import { clearCache } from "./cache";
@@ -32,7 +32,7 @@ import { clearCache } from "./cache";
 cron.schedule(
 	"20 9 * * 1-5",
 	async () => {
-		updateBuffer(fetchData, updateDatabaseDaily);
+		updateBuffer(fetchCropData, updateDatabaseDaily);
 		clearCache();
 	},
 	{

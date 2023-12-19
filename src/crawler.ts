@@ -3,10 +3,12 @@ import xlsx from "xlsx";
 import csvParse from "csv-parse/sync";
 import { load } from "cheerio";
 import { get } from "http";
+import path from "path";
+import fs from "fs";
 
 const today = new Date().toISOString();
 
-export async function fetchData(): Promise<any> {
+export async function fetchCropData(): Promise<any> {
 	try {
 		//fetch from url
 		const GET_URL = "https://www.namistt.com/";
@@ -82,7 +84,89 @@ export async function fetchData(): Promise<any> {
 
 		return processedData;
 	} catch (e) {
-		console.error("Error caught in fetchData:", e);
+		console.error("Error caught in fetchCropData:", e);
+		throw e;
+	}
+}
+
+export async function fetchMonthlyVolume(): Promise<any> {
+	try {
+		// fetch from local file
+		const spreadsheetPath = path.resolve(
+			__dirname,
+			"../tests/totalVolumes.xls"
+		);
+		const data = fs.readFileSync(spreadsheetPath);
+		const parsedData = xlsx.read(data, { type: "buffer" });
+		const sheetName = parsedData.SheetNames[13];
+		const sheetDataToCsv = xlsx.utils.sheet_to_csv(
+			parsedData.Sheets[sheetName]
+		);
+		const csvToJson = await csvParse.parse(sheetDataToCsv, {
+			columns: false,
+			skip_empty_lines: true,
+			skipRecordsWithEmptyValues: true,
+			from_line: 4,
+			on_record: (record) => {
+				const commodity = record[0];
+				const unit = record[1];
+				let i = 2;
+				const volumes = [];
+				while (record[i] && i <= 13) {
+					if (
+						record[i] === " " ||
+						record[i] === "na" ||
+						record[i] === "NA" ||
+						record[i] === null ||
+						record[i] === undefined
+					) {
+						volumes.push(0);
+					}
+					volumes.push(parseInt(record[i].split(",").join("")) || 0);
+					i++;
+				}
+				const yearlyVolume =
+					parseInt(record[14].split(",").join("")) || 0;
+				// 	const date = today;
+				const market = "NDNWM";
+
+				return {
+					commodity,
+					unit,
+					volumes,
+					yearlyVolume,
+					market,
+				};
+			},
+		});
+
+		const processedData = [];
+		let currentCategory = null;
+
+		csvToJson.forEach((item) => {
+			// Check if the current item is a category
+			if (
+				item.commodity &&
+				item.unit === "" &&
+				Array.isArray(item.volumes) &&
+				item.volumes.length === 0 &&
+				item.yearlyVolume === 0
+			) {
+				currentCategory = item.commodity;
+			} else {
+				// If not a category, add the current category to the item
+				if (currentCategory) {
+					processedData.push({
+						category: currentCategory,
+						...item,
+					});
+				}
+			}
+		});
+
+		return processedData.slice(0, -1);
+	} catch (e) {
+		console.error("Error caught in fetchMonthlyVolume:", e);
 		throw e;
 	}
 }
