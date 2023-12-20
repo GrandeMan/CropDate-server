@@ -36,7 +36,7 @@ cron.schedule(
 		clearCache();
 	},
 	{
-		scheduled: false,
+		scheduled: true,
 		timezone: "America/Port_of_Spain",
 	}
 );

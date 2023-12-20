@@ -1,5 +1,5 @@
 import axios from "axios";
-import { prisma } from "./prismaClient";
+import { prisma } from "./handlers/prismaClient";
 
 let cropCache: any[] = null;
 let ratesCache: any[] = null;
@@ -14,40 +14,32 @@ export async function cacheCrops() {
 		const crops = await prisma.crop.findMany({
 			include: {
 				volumes: {
-					take: 2,
+					take: 5,
 					orderBy: {
 						date: "desc",
 					},
 				},
 				prices: {
-					take: 2,
+					take: 5,
 					orderBy: {
 						date: "desc",
 					},
 				},
 			},
 		});
+		let i = 0;
+
 		const latestCropData = crops.map((crop) => ({
 			id: crop.id,
 			category: crop.category,
 			commodity: crop.commodity,
-			latest_date: crop.volumes[0]?.date,
-			latest_volume: crop.volumes[0]?.volume,
-			latest_price: crop.prices[0]?.price,
+			dates: crop.volumes.map((volume) => volume.date),
+			volumes: crop.volumes.map((volume) => volume.volume),
+			prices: crop.prices.map((price) => price.price),
 			market: crop.prices[0]?.market,
 		}));
 
-		const previousCropData = crops.map((crop) => ({
-			id: crop.id,
-			previous_date: crop.volumes[1]?.date,
-			previous_volume: crop.volumes[1]?.volume,
-			previous_price: crop.prices[1]?.price,
-		}));
-
-		cropCache = [
-			{ latest: latestCropData },
-			{ previous: previousCropData },
-		];
+		cropCache = latestCropData;
 
 		console.log("Crops cached");
 		return cropCache;

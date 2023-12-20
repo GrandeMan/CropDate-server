@@ -1,6 +1,6 @@
-import { prisma } from "./prismaClient";
+import { prisma } from "./handlers/prismaClient";
 
-export interface CropData {
+interface CropData {
 	category: string;
 	commodity: string;
 	unit: string;
