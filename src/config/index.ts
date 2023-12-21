@@ -1,24 +1,22 @@
 import merge from "lodash.merge";
 
-const stage = process.env.NODE_ENV || "Development";
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
+const stage = process.env.STAGE || "local";
 let envConfig;
 
-if (stage === "Production") {
+if (stage === "production") {
 	envConfig = require("./prod").default;
 } else {
 	envConfig = require("./local").default;
 }
 
-export default merge(
-	{
-		stage,
-		env: process.env.NODE_ENV,
-		port: 3000,
-		keys: {
-			db: process.env.DATABASE_URL,
-			rates: process.env.OPEN_EXCHANGE_API_KEY,
-		},
-	},
-	envConfig
-);
+const defaultConfig = {
+	stage,
+	dbUrl: process.env.DATABASE_URL,
+	rates: process.env.OPEN_EXCHANGE_API_KEY,
+	port: process.env.PORT,
+	logging: false,
+};
+
+export default merge(defaultConfig, envConfig);
