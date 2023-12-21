@@ -48,7 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
 	console.log("Server initialized");
-	res.status(200).sendFile(path.resolve("pages/index.html"));
+	res.status(200).sendFile(path.resolve("src/pages/index.html"));
 });
 
 app.use("/api", router);
