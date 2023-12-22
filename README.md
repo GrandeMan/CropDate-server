@@ -1,9 +1,30 @@
 # CropDate-server
 
-Server app for CropDate, an agriculture app that provides updates on crop prices.
+Server app for CropDate, an agriculture app that provides updates on crop prices from wholesale markets in Trinidad and Tobago.
+
+![cropdate-server-landing-page](https://github.com/GrandeMan/CropDate-server/assets/114616062/33810ed7-aeb8-444e-9374-334cce1c52c7)
 
 `Live Demo:` https://cropdate-server.onrender.com
-</br>
+<br/>
+<hr/>
+
+## How it works
+
+- Cron job is run every morning, Monday to Friday.
+- App checks if the source data is updated or not
+- If updated, it fetches the data, parses it, and then updates the database. It also clears the cache
+- When the API is called the app caches the data and returns the value
+
+### Cron Job 
+
+![cron-job-log](https://github.com/GrandeMan/CropDate-server/assets/114616062/f724f5b5-cd4f-4c90-a043-df1cbcd22f6d)
+<br/>
+
+The source data is only updated on weekdays but sometimes skips days so there's a buffer between the job and the function to fetch the data. It checks if the date from the source data (which only changes when the data updates) and the current date align.
+
+### Database
+
+I used PostgreSQL and Azure to create the database. I'm not familiar with the syntax so to avoid issues I used an ORM (Prisma). There was no particular reason for using these tools over anything else, I just used the most convenient and reliable tech.
 
 # Created Using
 
