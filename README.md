@@ -4,7 +4,7 @@ Server app for CropDate, an agriculture app that provides updates on crop prices
 
 ![cropdate-server-landing-page](https://github.com/GrandeMan/CropDate-server/assets/114616062/33810ed7-aeb8-444e-9374-334cce1c52c7)
 
-`Live Demo:` https://cropdate-server.onrender.com
+`Live Demo:` [server-demo-link](https://cropdate-server.azurewebsites.net/)
 <br/>
 <hr/>
 
