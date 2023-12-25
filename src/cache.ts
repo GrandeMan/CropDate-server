@@ -33,6 +33,7 @@ export async function cacheCrops() {
 			id: crop.id,
 			category: crop.category,
 			commodity: crop.commodity,
+			unit: crop.unit,
 			dates: crop.volumes.map((volume) => volume.date),
 			volumes: crop.volumes.map((volume) => volume.volume),
 			prices: crop.prices.map((price) => price.price),
