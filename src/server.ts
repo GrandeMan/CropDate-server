@@ -30,7 +30,7 @@ import { clearCache } from "./cache";
 
 // Run the updateBuffer function every weekday at 9:20 AM
 cron.schedule(
-	"20 9 * * 1-5",
+	"20 9 * * *",
 	async () => {
 		updateBuffer(fetchCropData, updateDatabaseDaily);
 		clearCache();

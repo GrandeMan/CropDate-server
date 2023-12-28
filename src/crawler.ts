@@ -3,9 +3,9 @@ import xlsx from "xlsx";
 import csvParse from "csv-parse/sync";
 import { load } from "cheerio";
 
-const today = new Date().toISOString();
-
 export async function fetchCropData(): Promise<any> {
+	const today = new Date().toISOString();
+
 	try {
 		//fetch from url
 		const GET_URL = "https://www.namistt.com/";
