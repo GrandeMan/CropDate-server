@@ -20,6 +20,7 @@
  */
 import path from "path";
 import express from "express";
+import cors from "cors";
 import router from "./router";
 import morgan from "morgan";
 import cron from "node-cron";
@@ -43,6 +44,7 @@ cron.schedule(
 
 const app = express();
 app.use(morgan("dev"));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
