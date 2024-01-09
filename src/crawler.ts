@@ -15,12 +15,21 @@ export async function fetchCropData(): Promise<any> {
 		const dailyUpdatePath = $(
 			`#box5 a[href*="Norris%20Deonarine%20NWM%20Daily%20Market%20Report"]`
 		).attr("href");
-		const dailyUpdateLink = `${GET_URL}${dailyUpdatePath.slice(3)}`;
-
+		const dailyUpdateLink = `${GET_URL}${dailyUpdatePath
+			.slice(3)
+			.replace(/(Re)8ports/g, "$1ports")}`;
+		const cleaned = dailyUpdateLink.replace(/\n|\t/g, "");
 		// download file and parse
-		const response2 = await axios.get(dailyUpdateLink, {
-			responseType: "arraybuffer",
-		});
+
+		const response2 = await axios
+			.get(cleaned, {
+				responseType: "arraybuffer",
+			})
+			.catch((e) => {
+				console.error("Error caught in fetchCropData:", e);
+				throw e;
+			});
+
 		const parsedData = xlsx.read(new Uint8Array(response2.data), {
 			type: "array",
 		});
